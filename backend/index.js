@@ -1,12 +1,27 @@
 const express = require("express");
+const cookieParser = require("cookie-parser");
+
+const { dataBaseConnection } = require("./utils/database");
 require("dotenv").config({
-    path:".env"
+  path: ".env",
 });
 const app = express();
+dataBaseConnection(process.env.MONGO_URI);
+
+//route
+const userRoute = require("./routes/userRoute");
+
+//Middleware
+app.use(express.json());
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
+
+//API
+// http://localhost:8000/api/v1/user/register
+app.use("/api/v1/user", userRoute);
 
 app.get("/", (req, res) => {
-  console.log("Express : ", express);
-  res.send("Hello this is Netflix Backend server");
+  res.send("hello this is netflix backend server");
 });
 
 app.listen(process.env.PORT, () => {
