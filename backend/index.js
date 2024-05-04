@@ -1,5 +1,6 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 const { dataBaseConnection } = require("./utils/database");
 require("dotenv").config({
@@ -16,8 +17,14 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
+const corsOptions = {
+  origin: "http://localhost:3000",
+};
+
+app.use(cors(corsOptions));
+
 //API
-// http://localhost:8000/api/v1/user/register
+// http://localhost:8080/api/v1/user/register
 app.use("/api/v1/user", userRoute);
 
 app.get("/", (req, res) => {

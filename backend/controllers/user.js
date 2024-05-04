@@ -42,6 +42,16 @@ const Login = async (req, res) => {
   }
 };
 
+const Logout = async (req, res) => {
+  return res
+    .status(201)
+    .cookie("token", " ", { expiresIn: new Date(Date.now()), httpOnly: true })
+    .json({
+      message: "User Logged Out Successfully",
+      success: true,
+    });
+};
+
 const Register = async (req, res) => {
   try {
     const { fullName, email, password } = req.body;
@@ -78,4 +88,5 @@ const Register = async (req, res) => {
 module.exports = {
   Register,
   Login,
+  Logout,
 };

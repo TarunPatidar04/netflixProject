@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Header from "./Header";
+import axios from "axios";
 
 const Login = () => {
   const [isLogin, setIsLoggin] = useState(false);
@@ -10,12 +11,39 @@ const Login = () => {
     setIsLoggin(!isLogin);
   };
 
-  const getInputData = (e) => {
+  const getInputData = async (e) => {
     e.preventDefault();
-    console.log(fullName, email, password);
-    setFullName("");
-    setEmail("");
-    setPassword("");
+    if (isLogin) {
+      //login
+      const user = { email, password };
+      try {
+        const res = await axios
+          .post("http://localhost:8080/api/v1/user/login", user)
+          .then(() => {
+            console.log("Data sumitted successfully");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } catch (error) {
+        console.log("Front-end login error", error);
+      }
+    } else {
+      //register
+      const user = { fullName, email, password };
+      try {
+        const res = await axios
+          .post("http://localhost:8080/api/v1/user/register", user)
+          .then(() => {
+            console.log("Data submitted Succesfully");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } catch (error) {
+        console.log("Front-end registration error", error);
+      }
+    }
   };
   return (
     <div className="w-full">
