@@ -25,8 +25,10 @@ const Login = async (req, res) => {
         success: false,
       });
     }
-
-    const token = jwt.sign("token", "hsiwbdajbsjbd");
+    const tokenData = {
+      id: user._id,
+    };
+    const token = jwt.sign(tokenData, "hsiwbdajbsjbd", { expiresIn: "1d" });
     console.log("Token : ", token);
     return res
       .status(200)
@@ -57,7 +59,7 @@ const Register = async (req, res) => {
       });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 16);
+    const hashedPassword = await bcrypt.hash(password, 16); //(Password,salt Value)
     // console.log(hashedPassword);
     await User.create({
       fullName,
