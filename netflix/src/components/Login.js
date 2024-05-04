@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import Header from "./Header";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [isLogin, setIsLoggin] = useState(false);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
   const logginHandler = () => {
     setIsLoggin(!isLogin);
   };
@@ -20,11 +22,18 @@ const Login = () => {
       try {
         const res = await axios.post(
           "http://localhost:8080/api/v1/user/login",
-          user
+          user,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            withCredentials: true,
+          }
         );
         if (res.data.success) {
           toast.success(res.data.message);
         }
+        navigate("/Browse");
       } catch (error) {
         toast.error(error.response.data.message);
         console.log("Front-end login error", error);
@@ -38,11 +47,18 @@ const Login = () => {
       try {
         const res = await axios.post(
           "http://localhost:8080/api/v1/user/register",
-          user
+          user,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            withCredentials: true,
+          }
         );
         if (res.data.success) {
           toast.success(res.data.message);
         }
+        setIsLoggin(true);
       } catch (error) {
         toast.error(error.response.data.message);
         console.log("Front-end registration error", error);

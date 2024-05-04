@@ -6,7 +6,7 @@ const Browse = () => {
     <div>
       <Header/>
       <div>
-        Browse
+      
       </div>
     </div>
   )
