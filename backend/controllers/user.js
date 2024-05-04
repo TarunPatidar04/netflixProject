@@ -79,6 +79,7 @@ const Register = async (req, res) => {
 
     return res.status(200).json({
       message: "Account Created Successfully",
+      success: true,
     });
   } catch (error) {
     console.log("Registration Error : ", error);

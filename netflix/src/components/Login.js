@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Header from "./Header";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const [isLogin, setIsLoggin] = useState(false);
@@ -17,32 +18,38 @@ const Login = () => {
       //login
       const user = { email, password };
       try {
-        const res = await axios
-          .post("http://localhost:8080/api/v1/user/login", user)
-          .then(() => {
-            console.log("Data sumitted successfully");
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        const res = await axios.post(
+          "http://localhost:8080/api/v1/user/login",
+          user
+        );
+        if (res.data.success) {
+          toast.success(res.data.message);
+        }
       } catch (error) {
+        toast.error(error.response.data.message);
         console.log("Front-end login error", error);
       }
+      setFullName("");
+      setEmail("");
+      setPassword("");
     } else {
       //register
       const user = { fullName, email, password };
       try {
-        const res = await axios
-          .post("http://localhost:8080/api/v1/user/register", user)
-          .then(() => {
-            console.log("Data submitted Succesfully");
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        const res = await axios.post(
+          "http://localhost:8080/api/v1/user/register",
+          user
+        );
+        if (res.data.success) {
+          toast.success(res.data.message);
+        }
       } catch (error) {
+        toast.error(error.response.data.message);
         console.log("Front-end registration error", error);
       }
+      setFullName("");
+      setEmail("");
+      setPassword("");
     }
   };
   return (
