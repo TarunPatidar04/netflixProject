@@ -29,7 +29,7 @@ const Login = async (req, res) => {
       id: user._id,
     };
     const token = jwt.sign(tokenData, "hsiwbdajbsjbd", { expiresIn: "1d" });
-    console.log("Token : ", token);
+    // console.log("Token : ", token);
     return res
       .status(200)
       .cookie("token", token, { httpOnly: true })
