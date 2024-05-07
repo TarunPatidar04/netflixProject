@@ -3,13 +3,18 @@ import Header from "./Header";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-
+import { useDispatch } from "react-redux";
+import { setUser } from "../redux/userSlice";
+console.log(setUser);
 const Login = () => {
+
   const [isLogin, setIsLoggin] = useState(false);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const logginHandler = () => {
     setIsLoggin(!isLogin);
   };
@@ -33,6 +38,8 @@ const Login = () => {
         if (res.data.success) {
           toast.success(res.data.message);
         }
+
+        dispatch(setUser(res.data.user));
         navigate("/Browse");
       } catch (error) {
         toast.error(error.response.data.message);
