@@ -3,11 +3,9 @@ import Header from "./Header";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setUser } from "../redux/userSlice";
-console.log(setUser);
+import { useDispatch, useSelector } from "react-redux";
+import { setUser, setloading } from "../redux/userSlice";
 const Login = () => {
-
   const [isLogin, setIsLoggin] = useState(false);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -15,12 +13,15 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const isLoading = useSelector((store) => store.app.isLoading);
+
   const logginHandler = () => {
     setIsLoggin(!isLogin);
   };
 
   const getInputData = async (e) => {
     e.preventDefault();
+    dispatch(setloading(true));
     if (isLogin) {
       //login
       const user = { email, password };
@@ -44,12 +45,15 @@ const Login = () => {
       } catch (error) {
         toast.error(error.response.data.message);
         console.log("Front-end login error", error);
+      } finally {
+        dispatch(setloading(false));
       }
       setFullName("");
       setEmail("");
       setPassword("");
     } else {
       //register
+      dispatch(setloading(true));
       const user = { fullName, email, password };
       try {
         const res = await axios.post(
@@ -69,6 +73,8 @@ const Login = () => {
       } catch (error) {
         toast.error(error.response.data.message);
         console.log("Front-end registration error", error);
+      } finally {
+        dispatch(setloading(false));
       }
       setFullName("");
       setEmail("");
@@ -130,7 +136,8 @@ const Login = () => {
             }}
           />
           <button className="bg-red-600 mt-6 p-3 text-white rounded-sm font-bold">
-            {isLogin ? "Login" : "Signup"}
+            {/* {isLogin ? "Login" : "Signup"} */}
+            {`${isLoading ? "loading..." : isLogin ? "Login" : "Signup"} `}
           </button>
           <p className="text-white mt-2">
             {isLogin ? "New to Netflix ? " : "Already have an account ? "}
